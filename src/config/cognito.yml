@@ -16,3 +16,12 @@ resources:
             RequireUppercase: true
             RequireNumbers: true
             RequireSymbols: true
+    CognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties: 
+        ClientName: usersPoolCLient
+        GenerateSecret: false
+        UserPoolId: 
+          Ref: CognitoUserPool
+        ExplicitAuthFlows: 
+          - USER_PASSWORD_AUTH
