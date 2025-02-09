@@ -1,0 +1,18 @@
+resources: 
+  Resources: 
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties: 
+        UserPoolName: users
+        Schema: 
+          - Name: email
+            AttributeDataType: String
+            Mutable: true
+            Required: true
+        Policies: 
+          PasswordPolicy: 
+            MinimumLength: 8
+            RequireLowercase: true
+            RequireUppercase: true
+            RequireNumbers: true
+            RequireSymbols: true
