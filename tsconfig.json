@@ -10,6 +10,6 @@
     "lib": ["es2015"],
     "rootDir": "./",
     "skipLibCheck": true,
-    "types": ["node", "aws-lambda"]
+    "types": ["aws-lambda"]
   }
 }
