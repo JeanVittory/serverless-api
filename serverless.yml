@@ -6,21 +6,17 @@ provider:
   name: aws
   runtime: nodejs20.x
   environment: 
-    COGNITO_CLIENT_ID: 
-      Ref: ${file(./src/config/cognito.yml):Resources.CognitoUserPoolClient}
-    COGNITO_USER_POOL:
-      Ref: ${file(./src/config/cognito.yml):Resources.CognitoUserPool}
+    COGNITO_USER_POOL_ID: "${cf:cognito-stack.CognitoUserPoolId}"
+    COGNITO_USER_POOL_CLIENT_ID: "${cf:cognito-stack.CognitoUserPoolClientId}"
 
 functions:
-  hello:
-    handler: src/hello.handler
+  register:
+    handler: src/lambdas/register.handler
     events: 
       - httpApi: 
-          method: GET
-          path: /hello
+          method: POST
+          path: /sign-up
 
 
 plugins: 
   - serverless-offline
-
-resources: ${file(./src/config/cognito.yml)}
