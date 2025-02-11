@@ -1,27 +1,40 @@
-resources: 
-  Resources: 
-    CognitoUserPool:
-      Type: AWS::Cognito::UserPool
-      Properties: 
-        UserPoolName: users
-        Schema: 
-          - Name: email
-            AttributeDataType: String
-            Mutable: true
-            Required: true
-        Policies: 
-          PasswordPolicy: 
-            MinimumLength: 8
-            RequireLowercase: true
-            RequireUppercase: true
-            RequireNumbers: true
-            RequireSymbols: true
-    CognitoUserPoolClient:
-      Type: AWS::Cognito::UserPoolClient
-      Properties: 
-        ClientName: usersPoolCLient
-        GenerateSecret: false
-        UserPoolId: 
-          Ref: CognitoUserPool
-        ExplicitAuthFlows: 
-          - USER_PASSWORD_AUTH
+Resources: 
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties: 
+      UserPoolName: users
+      Schema: 
+        - Name: email
+          AttributeDataType: String
+          Mutable: true
+          Required: true
+        - Name: nickname
+          AttributeDataType: String
+          Mutable: false
+          Required: true
+      Policies: 
+        PasswordPolicy: 
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties: 
+      ClientName: usersPoolCLient
+      GenerateSecret: false
+      UserPoolId: 
+        Ref: CognitoUserPool
+      ExplicitAuthFlows: 
+        - USER_PASSWORD_AUTH
+
+Outputs: 
+  CognitoUserPoolId: 
+    Value: !Ref CognitoUserPool
+    Export:
+     Name: CognitoUserPoolId
+  CognitoUserPoolClientId: 
+    Value: !Ref CognitoUserPoolClient
+    Export:
+     Name: CognitoUserPoolClientId
