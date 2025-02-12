@@ -5,8 +5,25 @@ import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provid
 const cognito = new CognitoIdentityProvider()
 
 export const handler:APIGatewayProxyHandler = async (event) => {
+
+    if(!event.body){
+        return {
+            statusCode: 400,
+            body: JSON.stringify({message: "Missing body in request"})
+        }
+    }
+
     const body = JSON.parse(event.body || "{}")
+
     const {email, password, nickname} = body
+
+    if(!email || !password || !nickname){
+        return {
+            statusCode: 400,
+            body: JSON.stringify({message: "Missing required fields in request"})
+        }
+    }
+
     const params = {
         ClientId: process.env.COGNITO_USER_POOL_CLIENT_ID || "",
         Username: email,
@@ -23,8 +40,8 @@ export const handler:APIGatewayProxyHandler = async (event) => {
         ]
     }
     try {
-        const result = await cognito.signUp(params)
-        console.log(result)
+         await cognito.signUp(params)
+
         return {
             statusCode: 200,
             body: JSON.stringify({message: "User registered successfully"})
