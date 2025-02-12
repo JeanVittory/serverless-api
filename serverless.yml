@@ -16,6 +16,13 @@ functions:
       - httpApi: 
           method: POST
           path: /sign-up
+  login: 
+    handler: /src/lambdas/login.handler
+    events:
+      - httpApi: 
+          method: POST
+          path: /sign-in
+
 
 
 plugins: 
