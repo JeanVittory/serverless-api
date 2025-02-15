@@ -1,9 +1,19 @@
-import { APIGatewayProxyHandler } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
+import middy from "@middy/core";
+import httpJsonBodyParser from "@middy/http-json-body-parser";
 
 const cognito = new CognitoIdentityProvider();
 
-export const handler: APIGatewayProxyHandler = async (event) => {
+type RegisterUserInput = {
+  email: string;
+  password: string;
+  nickname: string;
+};
+
+const registerHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   if (!event.body) {
     return {
       statusCode: 400,
@@ -11,9 +21,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 
-  const body = JSON.parse(event.body || "{}");
+  const body = event.body;
 
-  const { email, password, nickname } = body;
+  const { email, password, nickname } = body as unknown as RegisterUserInput;
 
   if (!email || !password || !nickname) {
     return {
@@ -51,3 +61,5 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 };
+
+export const handler = middy(registerHandler).use(httpJsonBodyParser());

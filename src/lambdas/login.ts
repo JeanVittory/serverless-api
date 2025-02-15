@@ -1,14 +1,24 @@
-import { APIGatewayProxyHandler } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {
   CognitoIdentityProvider,
   AuthFlowType,
 } from "@aws-sdk/client-cognito-identity-provider";
+import middy from "@middy/core";
+import httpJsonBodyParser from "@middy/http-json-body-parser";
+import { LoginUserInput } from "../types/login";
 
 const cognito = new CognitoIdentityProvider();
 
-export const handler: APIGatewayProxyHandler = async (event) => {
-  const body = JSON.parse(event.body || "{}");
-  const { email, password } = body;
+const loginHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  if (!event.body) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Missing body in request" }),
+    };
+  }
+  const { email, password } = event.body as unknown as LoginUserInput;
   const params = {
     AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
     ClientId: process.env.COGNITO_USER_POOL_CLIENT_ID || "",
@@ -36,3 +46,5 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     };
   }
 };
+
+export const handler = middy(loginHandler).use(httpJsonBodyParser());
