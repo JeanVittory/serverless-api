@@ -22,6 +22,12 @@ functions:
       - httpApi:
           method: POST
           path: /sign-in
+  getUsers:
+    handler: src/lambdas/getUsers.handler
+    events:
+      - httpApi:
+          method: GET
+          path: /users
 
 plugins:
   - serverless-offline
