@@ -5,25 +5,23 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs20.x
-  environment: 
+  environment:
     COGNITO_USER_POOL_ID: "${cf:cognito-stack.CognitoUserPoolId}"
     COGNITO_USER_POOL_CLIENT_ID: "${cf:cognito-stack.CognitoUserPoolClientId}"
 
 functions:
   register:
     handler: src/lambdas/register.handler
-    events: 
-      - httpApi: 
+    events:
+      - httpApi:
           method: POST
           path: /sign-up
-  login: 
+  login:
     handler: /src/lambdas/login.handler
     events:
-      - httpApi: 
+      - httpApi:
           method: POST
           path: /sign-in
 
-
-
-plugins: 
+plugins:
   - serverless-offline
