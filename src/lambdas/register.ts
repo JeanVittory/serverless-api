@@ -2,14 +2,9 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
 import middy from "@middy/core";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
+import { RegisterUserInput } from "../types/register";
 
 const cognito = new CognitoIdentityProvider();
-
-type RegisterUserInput = {
-  email: string;
-  password: string;
-  nickname: string;
-};
 
 const registerHandler = async (
   event: APIGatewayProxyEvent
